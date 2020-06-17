@@ -1,21 +1,19 @@
 class Room
-  attr_reader :category, :length, :width
+  attr_reader :type, :length, :width, :painted
 
-  def initialize(category, length, width)
-    @category = category
-    @length = 10
+  def initialize(type, length, width)
+    @type = type
+    @length = length
     @width = width
-  end
-
-  def area
-    @length * @width.to_i
-  end
-
-  def paint
-    color = color
+    @painted = false
   end
 
   def is_painted?
-    paint = false
+    @painted
   end
+
+  def paint
+    @painted = true
+  end
+
 end

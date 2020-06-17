@@ -2,46 +2,52 @@ class House
   attr_reader :price, :address, :rooms
 
   def initialize(price, address)
-    @price = '$400000'
+    @price = price.delete('$').to_i
     @address = address
     @rooms = []
   end
 
   def add_room(room)
-    rooms << room
+    @rooms << room
   end
 
   def above_market_average?
-    if price.to_i > $500000.to_i
+    if @price >= 500000
       true
     else
       false
     end
   end
 
-  def rooms_from_category(category)
-    rooms.select do |room|
-      room.category == :bedroom
+  def rooms_from_category(type)
+    @rooms.select do |room|
+      room.type == type
     end
   end
 
   def area
-    room1 = Room.new(:bedroom, 10, '13')
-    room2 = Room.new(:bedroom, 11, '15')
-    room3 = Room.new(:living_room, 25, '15')
-    room4 = Room.new(:basement, 30, '41')
-    house = House.new("$400000", "123 sugar lane")
-    house.add_room(room1)
-    house.add_room(room2)
-    house.add_room(room3)
-    house.add_room(room4)
-    165 + 130 + 375 + 1230
-
-    #I know I messed this up. I did the math on paper, but was not getting the same value when I added it in Ruby! Sorry!
+    @rooms.sum do |room|
+      room.length * room.width.to_i
+    end
   end
 
   def details
-    @price
-    @address
+    details = {"price" => @price,
+              "address" => @address
+              }
   end
+
+  def price_per_square_foot
+    pricing = @price.to_f / area.to_f
+    pricing.to_f.round(2)
+  end
+
+  def rooms_by_category
+    cat = {}
+    @rooms.each do |room|
+      cat[room.type] = rooms_from_category(room.type)
+    end
+    cat 
+  end
+
 end
